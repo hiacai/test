@@ -4,11 +4,10 @@
 Created on 2015/5/8
 @author: Linwencai
 """
-from twisted.python import log
-from firefly.server.globalobject import GlobalObject, remoteserviceHandle
+from gfirefly.server.globalobject import GlobalObject, remoteserviceHandle
+
 
 @remoteserviceHandle('gate')
 def pushObject(topicID,msg,sendList):
     GlobalObject().netfactory.pushObject(topicID, msg, sendList)
-    return
 

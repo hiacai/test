@@ -4,7 +4,7 @@
 Created on 2015/5/8
 @author: Linwencai
 """
-from twisted.python import log
+from gtwisted.utils import log
 from app.game.GameApp import GameServiceHandle, SendMessage
 
 @GameServiceHandle

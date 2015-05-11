@@ -4,8 +4,8 @@ Created on 2014-07-21
 @author: Linwencai
 """
 from json import loads
-from twisted.python import log
-from firefly.server.globalobject import rootserviceHandle, GlobalObject
+from gtwisted.utils import log
+from gfirefly.server.globalobject import rootserviceHandle, GlobalObject
 from app.gate.GateApp import localservice
 
 @rootserviceHandle
@@ -14,6 +14,7 @@ def forwarding(key, dynamicId, data):
         dataDict = {}
     else:
         dataDict = loads(data)  # json转dict
+    log.msg("Recv Key:%s dynamicId:%s dataDict:%s" % (key, dynamicId, dataDict))
 
     if key in localservice._targets:
         return localservice.callTarget(key, key, dynamicId, dataDict)

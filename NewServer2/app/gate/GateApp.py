@@ -5,11 +5,10 @@ Created on 2015/5/8
 @author: Linwencai
 """
 from json import dumps
-from twisted.python import log
+from gtwisted.utils import log
 from datetime import datetime, date
-from firefly.server.globalobject import GlobalObject
-from firefly.utils.services import CommandService
-from twisted.internet import defer
+from gfirefly.server.globalobject import GlobalObject
+from gfirefly.utils.services import CommandService
 
 
 class LocalService(CommandService):
@@ -26,13 +25,9 @@ class LocalService(CommandService):
             if not target:
                 log.err('the command ' + str(targetKey) + ' not Found on service')
                 return None
-            # if targetKey not in self.unDisplay:
-            #     log.msg("call method %s on service[single]" % target.__name__)
             defer_data = target(targetKey, *args, **kw)
             if not defer_data:
                 return None
-            if isinstance(defer_data, defer.Deferred):
-                return defer_data
             d = defer.Deferred()
             d.callback(defer_data)
         finally:
@@ -64,9 +59,11 @@ def SendMessage(topicID, dynamicId, state, message, isSend=False):
             }
     if state:
         Data['Data'] = message
+        log.msg("Send:%s dynamicId:%s topicID%s" % (Data, dynamicId, topicID))
     else:
         Data['Message'] = message
+        log.err("Send:%s dynamicId:%s topicID:%s" % (Data, dynamicId, topicID))
     jsonData = dumps(Data, separators=(',', ':'), default=jsonDefault)
     if isSend is False:
         return jsonData
-    return GlobalObject().root.callChild("net", "pushObject", topicID, msg, dynamicId)
+    return GlobalObject().root.callChild("net", "pushObject", topicID, msg, dynamicIdList)

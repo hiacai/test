@@ -5,10 +5,10 @@ Created on 2015/5/8
 @author: Linwencai
 """
 from json import dumps
-from twisted.python import log
 from datetime import datetime, date
-from firefly.server.globalobject import GlobalObject
-from firefly.utils.services import CommandService
+from gtwisted.utils import log
+from gfirefly.server.globalobject import GlobalObject
+from gfirefly.utils.services import CommandService
 
 GameService = CommandService("GameServer")
 GlobalObject().remote['gate']._reference.addService(GameService)
@@ -34,8 +34,10 @@ def SendMessage(topicID, dynamicId, state, message, isSend=False):
             }
     if state:
         Data['Data'] = message
+        log.msg("Send:%s dynamicId:%s topicID%s" % (Data, dynamicId, topicID))
     else:
         Data['Message'] = message
+        log.err("Send:%s dynamicId:%s topicID:%s" % (Data, dynamicId, topicID))
     jsonData = dumps(Data, separators=(',', ':'), default=jsonDefault)
     if isSend is False:
         return jsonData
