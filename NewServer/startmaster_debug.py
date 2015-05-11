@@ -16,12 +16,14 @@ if os.name!='nt' and os.name!='posix':
     from twisted.internet import epollreactor
     epollreactor.install()
 
-debugSername = "gate"  # 要调试的服务器名
+debugSername = ""  # 要调试的服务器名
 
 if len(argv) == 1:
+    if not debugSername:
+        debugSername = raw_input("Debug Server Name:")
     cmds = 'python %s %s' % (os.path.basename(argv[0]), MASTER_SERVER_MODE)
     subprocess.Popen(cmds, shell=True)
-    sleep(1)
+    sleep(3)
 
     config = json.load(open('config.json', 'r'))
     sersconf = config.get('servers')

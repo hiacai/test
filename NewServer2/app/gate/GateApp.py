@@ -59,11 +59,10 @@ def SendMessage(topicID, dynamicId, state, message, isSend=False):
             }
     if state:
         Data['Data'] = message
-        log.msg("Send:%s dynamicId:%s topicID%s" % (Data, dynamicId, topicID))
     else:
         Data['Message'] = message
-        log.err("Send:%s dynamicId:%s topicID:%s" % (Data, dynamicId, topicID))
     jsonData = dumps(Data, separators=(',', ':'), default=jsonDefault)
     if isSend is False:
         return jsonData
-    return GlobalObject().root.callChild("net", "pushObject", topicID, msg, dynamicIdList)
+    return GlobalObject().root.callChild("net", "pushObject", topicID, msg, dynamicId)
+

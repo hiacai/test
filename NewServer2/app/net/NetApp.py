@@ -15,11 +15,10 @@ def callTarget(self, targetKey, *args, **kw):
 CommandService.callTarget = callTarget
 
 @netserviceHandle
-def Forwarding_0(keyname, _conn, data):
+def Forwarding_0(key, _conn, data):
     '''转发服务器.用来接收客户端的消息转发给其他服务
     '''
-    print "Forwarding_0", keyname, data
-    message = GlobalObject().remote['gate'].callRemote("forwarding",
-                                                       keyname, _conn.transport.sessionno, data)
+    log.msg("Recv Key:%s dynamicId:%s data:%s" % (key, _conn.transport.sessionno, data))
+    message = GlobalObject().remote['gate'].callRemote("forwarding", key, _conn.transport.sessionno, data)
     return message
 

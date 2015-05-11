@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import time
-from socket import AF_INET, SOCK_STREAM, socket
-from thread import start_new
-from time import sleep
-import struct
 import json
+import struct
+from time import sleep
+from thread import start_new
+from socket import AF_INET, SOCK_STREAM, socket
 
 HOST = raw_input("host:")
 if not HOST:
@@ -16,35 +16,35 @@ ADDR=(HOST , PORT)
 client = socket(AF_INET,SOCK_STREAM)
 client.connect(ADDR)
 
+HEAD_0 = chr(1)
+HEAD_1 = chr(2)
+HEAD_2 = chr(3)
+HEAD_3 = chr(4)
+ProtoVersion = chr(5)
+ServerVersion = 6
+HEAD = struct.pack('!sssssI', HEAD_0, HEAD_1, HEAD_2, HEAD_3, ProtoVersion, ServerVersion)
 
 def sendData(sendstr, commandId):
-    HEAD_0 = chr(1)
-    HEAD_1 = chr(2)
-    HEAD_2 = chr(3)
-    HEAD_3 = chr(4)
-    ProtoVersion = chr(5)
-    ServerVersion = 6
-    data = struct.pack('!sssss3I', HEAD_0, HEAD_1, HEAD_2,
-                       HEAD_3, ProtoVersion, ServerVersion,
-                       len(sendstr) + 4, commandId)
-    return data + sendstr
-
+    dataInfo = struct.pack('!2I', len(sendstr) + 4, commandId)
+    return HEAD + dataInfo + sendstr
 
 def resolveRecvdata(data):
-    dataList = data.split("N%&0")
-    for dataStr in dataList:
-        if not dataStr:
-            continue
-        head = struct.unpack('!sssss3I', dataStr[:17])
-        length = head[5]
-        dataStr = dataStr[13:13 + length]
+    index = 0
+    while index < len(data):
+        index = data.find(HEAD, index)
+        if index == -1:
+            break
+        index += len(HEAD) + 8
+        length, key = struct.unpack('!2I', data[index -8: index])
+        dataStr = data[index: index + length]
+        index += length
         try:
             dataDict = json.loads(dataStr, "utf-8")
             dataJson = json.dumps(dataDict, ensure_ascii=False, indent=2, sort_keys=True)
-            print "!!!!!!!!!!recv:!!!!!!!!!!\n%s" % dataJson
+            print "!!!!!!!!!!recv:%s!!!!!!!!!!\n%s" % (key, dataJson)
         except BaseException:
             dataStr = unicode(dataStr, "utf-8")
-            print '!!!!!!!!!!recv:!!!!!!!!!!\n%s\nkey:' % dataStr,
+            print '!!!!!!!!!!recv:%s!!!!!!!!!!\n%s' % (key, dataStr)
     return data
 
 
@@ -59,13 +59,10 @@ def recv():
 
 
 def send():
-    global client
-
     def _send(key):
-        global client
-        if not isinstance(key, int):
-            return
-        if key == 101:
+        if key == 0:
+            return True
+        elif key == 101:
             msg = sendData('{"name":"hiacai","pwd":"123"}', key)
         elif key == 102:
             msg = sendData('{"name":"hiacai","pwd":"123"}', key)
@@ -81,10 +78,12 @@ def send():
             if _send(key):
                 break
             sleep(0.3)
-        except Exception, e:
-            raw_input(e)
-            break
+        except Exception as e:
+            print(e)
+    return
+
 
 if __name__ == "__main__":
     start_new(recv, ())
     send()
+

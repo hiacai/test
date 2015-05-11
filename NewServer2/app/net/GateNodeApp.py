@@ -10,4 +10,5 @@ from gfirefly.server.globalobject import GlobalObject, remoteserviceHandle
 @remoteserviceHandle('gate')
 def pushObject(topicID,msg,sendList):
     GlobalObject().netfactory.pushObject(topicID, msg, sendList)
+    return
 
