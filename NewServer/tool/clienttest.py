@@ -18,12 +18,12 @@ client.connect(ADDR)
 
 
 def sendData(sendstr, commandId):
-    HEAD_0 = chr(78)
-    HEAD_1 = chr(37)
-    HEAD_2 = chr(38)
-    HEAD_3 = chr(48)
-    ProtoVersion = chr(9)
-    ServerVersion = 0
+    HEAD_0 = chr(1)
+    HEAD_1 = chr(2)
+    HEAD_2 = chr(3)
+    HEAD_3 = chr(4)
+    ProtoVersion = chr(5)
+    ServerVersion = 6
     data = struct.pack('!sssss3I', HEAD_0, HEAD_1, HEAD_2,
                        HEAD_3, ProtoVersion, ServerVersion,
                        len(sendstr) + 4, commandId)

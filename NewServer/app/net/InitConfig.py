@@ -8,15 +8,25 @@ from firefly.server.globalobject import GlobalObject
 from firefly.netconnect.datapack import DataPackProtoc
 
 
+# 定义包头
+dataprotocl = DataPackProtoc(1, 2, 3, 4, 5, 6)
+GlobalObject().netfactory.setDataProtocl(dataprotocl)
+
+
+def callWhenConnCreate(conn):
+    """ 连接建立时回调
+    """
+    return
+GlobalObject().netfactory.doConnectionMade = callWhenConnCreate
+
+
 def callWhenConnLost(conn):
     """ 连接断开时回调
     """
     dynamicId = conn.transport.sessionno
     GlobalObject().remote['gate'].callRemote("netconnlost", dynamicId)
-
+    return
 GlobalObject().netfactory.doConnectionLost = callWhenConnLost
-dataprotocl = DataPackProtoc(78, 37, 38, 48, 9, 0)
-GlobalObject().netfactory.setDataProtocl(dataprotocl)
 
 
 def loadModule():
