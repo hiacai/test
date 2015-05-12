@@ -26,7 +26,7 @@ def netconnlost(dynamicId):
     """ 客户端断线 net转发给game
     """
     log.msg('%s connlost' % dynamicId)
-    GlobalObject().root.callChild("game", 102, 102, dynamicId, None)
+    GlobalObject().root.callChild("game", 103, 103, dynamicId, None)
     return
 
 

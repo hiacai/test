@@ -24,9 +24,11 @@ ProtoVersion = chr(5)
 ServerVersion = 6
 HEAD = struct.pack('!sssssI', HEAD_0, HEAD_1, HEAD_2, HEAD_3, ProtoVersion, ServerVersion)
 
+
 def sendData(sendstr, commandId):
     dataInfo = struct.pack('!2I', len(sendstr) + 4, commandId)
     return HEAD + dataInfo + sendstr
+
 
 def resolveRecvdata(data):
     index = 0
@@ -63,9 +65,9 @@ def send():
         if key == 0:
             return True
         elif key == 101:
-            msg = sendData('{"name":"hiacai","pwd":"123"}', key)
+            msg = sendData('{"acc":"hiac","pwd":"123"}', key)
         elif key == 102:
-            msg = sendData('{"name":"hiacai","pwd":"123"}', key)
+            msg = sendData('{"acc":"hiac","pwd":"123"}', key)
         else:
             json = raw_input("json:")
             msg = sendData(msg, key)

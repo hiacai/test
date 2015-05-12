@@ -39,5 +39,5 @@ def SendMessage(topicID, dynamicId, state, message, isSend=False):
     jsonData = dumps(Data, separators=(',', ':'), default=jsonDefault)
     if isSend is False:
         return jsonData
-    return GlobalObject().remote['gate'].callRemote("pushObject", 999, jsonData, [dynamicId])
+    return GlobalObject().remote['gate'].callRemote("pushObject", topicID, jsonData, [dynamicId])
     

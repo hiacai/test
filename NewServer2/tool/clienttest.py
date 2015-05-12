@@ -65,9 +65,9 @@ def send():
         if key == 0:
             return True
         elif key == 101:
-            msg = sendData('{"name":"hiacai","pwd":"123"}', key)
+            msg = sendData('{"acc":"hiac","pwd":"123"}', key)
         elif key == 102:
-            msg = sendData('{"name":"hiacai","pwd":"123"}', key)
+            msg = sendData('{"acc":"hiac","pwd":"123"}', key)
         else:
             json = raw_input("json:")
             msg = sendData(msg, key)
@@ -88,3 +88,4 @@ def send():
 if __name__ == "__main__":
     start_new(recv, ())
     send()
+

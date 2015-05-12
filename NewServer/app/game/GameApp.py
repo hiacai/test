@@ -10,6 +10,12 @@ from datetime import datetime, date
 from firefly.server.globalobject import GlobalObject
 from firefly.utils.services import CommandService
 
+
+# def mapTarget(self, target):
+#     key = int((target.__name__).split('_')[-1])
+#     self._targets[key] = target
+# CommandService.mapTarget = mapTarget
+
 GameService = CommandService("GameServer")
 GlobalObject().remote['gate']._reference.addService(GameService)
 
@@ -39,5 +45,5 @@ def SendMessage(topicID, dynamicId, state, message, isSend=False):
     jsonData = dumps(Data, separators=(',', ':'), default=jsonDefault)
     if isSend is False:
         return jsonData
-    return GlobalObject().remote['gate'].callRemote("pushObject", 999, jsonData, [dynamicId])
+    return GlobalObject().remote['gate'].callRemote("pushObject", topicID, jsonData, [dynamicId])
     

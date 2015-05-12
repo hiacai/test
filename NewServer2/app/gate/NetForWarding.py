@@ -14,7 +14,6 @@ def forwarding(key, dynamicId, data):
         dataDict = {}
     else:
         dataDict = loads(data)  # json转dict
-    log.msg("Recv Key:%s dynamicId:%s dataDict:%s" % (key, dynamicId, dataDict))
 
     if key in localservice._targets:
         return localservice.callTarget(key, key, dynamicId, dataDict)
@@ -27,7 +26,7 @@ def netconnlost(dynamicId):
     """ 客户端断线 net转发给game
     """
     log.msg('%s connlost' % dynamicId)
-    GlobalObject().root.callChild("game", 102, 102, dynamicId, None)
+    GlobalObject().root.callChild("game", 103, 103, dynamicId, None)
     return
 
 
