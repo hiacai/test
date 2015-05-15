@@ -6,15 +6,9 @@ Created on 2015/5/8
 """
 from json import dumps
 from twisted.python import log
-from datetime import datetime, date
 from firefly.server.globalobject import GlobalObject
 from firefly.utils.services import CommandService
 
-
-# def mapTarget(self, target):
-#     key = int((target.__name__).split('_')[-1])
-#     self._targets[key] = target
-# CommandService.mapTarget = mapTarget
 
 GameService = CommandService("GameServer")
 GlobalObject().remote['gate']._reference.addService(GameService)
@@ -24,26 +18,16 @@ def GameServiceHandle(target):
     GameService.mapTarget(target)
 
 
-def jsonDefault(obj):
-    """json.dumps支持datetime/date类型
+def SendMessage(state, message, topicID=0, dynamicIds=None):
+    """ 返回消息
+    :param state: 返回的状态
+    :param message: 返回的消息
+    :param topicID: 协议号
+    :param dynamicIds: 推送的客户端Id
+    :return:
     """
-    if isinstance(obj, datetime):
-        return obj.strftime('%Y-%m-%d %H:%M:%S')
-    elif isinstance(obj, date):
-        return obj.strftime('%Y-%m-%d')
-    else:
-        raise TypeError('%r is not JSON serializable' % obj)
-
-
-def SendMessage(topicID, dynamicId, state, message, isSend=False):
-    Data = {'State': state,
-            }
-    if state:
-        Data['Data'] = message
-    else:
-        Data['Message'] = message
-    jsonData = dumps(Data, separators=(',', ':'), default=jsonDefault)
-    if isSend is False:
-        return jsonData
-    return GlobalObject().remote['gate'].callRemote("pushObject", topicID, jsonData, [dynamicId])
+    jsonData = dumps({'State': state, 'Data': message}, separators=(',', ':'))
+    if dynamicIds:
+        GlobalObject().remote['gate'].callRemote("pushObject", topicID, jsonData, dynamicIds)
+    return jsonData
     

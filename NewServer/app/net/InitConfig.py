@@ -32,3 +32,4 @@ GlobalObject().netfactory.doConnectionLost = callWhenConnLost
 def loadModule():
     import NetApp
     import GateNodeApp
+

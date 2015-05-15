@@ -70,3 +70,4 @@ def SendMessage(topicID, dynamicId, state, message, isSend=False):
     if isSend is False:
         return jsonData
     return GlobalObject().root.callChild("net", "pushObject", topicID, msg, dynamicId)
+

@@ -36,3 +36,4 @@ def pushObject(topicID, msg, dynamicIdList):
     """
     GlobalObject().root.callChild("net", "pushObject", topicID, msg, dynamicIdList)
     return
+
