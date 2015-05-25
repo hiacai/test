@@ -44,7 +44,7 @@
         "user": "root",
         "passwd": "111",
         "port": 3306,
-        "db": "test",
+        "db": "plane2",
         "charset": "utf8"
     },
     "memcached": {

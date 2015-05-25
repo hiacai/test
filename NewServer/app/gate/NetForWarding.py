@@ -8,6 +8,7 @@ from twisted.python import log
 from firefly.server.globalobject import rootserviceHandle, GlobalObject
 from app.gate.GateApp import localservice
 
+
 @rootserviceHandle
 def forwarding(key, dynamicId, data):
     if not data:
