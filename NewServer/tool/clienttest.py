@@ -44,7 +44,7 @@ def resolveRecvdata(data):
         index += len(HEAD) + 8
         length, key = struct.unpack('!2I', data[index -8: index])
         dataStr = data[index: index + length]
-        index += length
+        index += length - 4
         try:
             dataDict = json.loads(dataStr, "utf-8")
             dataJson = json.dumps(dataDict, ensure_ascii=False, indent=2, sort_keys=True)
