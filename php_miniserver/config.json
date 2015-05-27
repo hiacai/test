@@ -1,0 +1,13 @@
+{
+    "google_billing": {
+        "angel_dia01": 1,
+        "angel_dia02": 2
+    },
+    "db": {
+        "host": "127.0.0.1:3306",
+        "user": "root",
+        "passwd": "111",
+        "db": "minigame",
+        "charset": "utf8"
+    }
+}
