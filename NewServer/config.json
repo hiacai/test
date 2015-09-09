@@ -1,12 +1,13 @@
 {
     "master": {
         "roothost": "localhost",
-        "rootport": 999,
-        "webport": 998
+        "rootport": 4999,
+        "webport": 4998
     },
     "servers": {
         "net": {
             "netport": 10000,
+            "webSocketPort": 10100,
             "name": "net",
             "remoteport": [
                 {
