@@ -14,6 +14,10 @@ def httpTest_1(key, dynamicId, argument):
     log.msg("httpTest_1")
     return "hi http"
 
+@GameServiceHandle
+def webSocketTest_2(key, dynamicId, argument):
+    log.msg("webSocketTest_2")
+    return "hi webSocket"
 
 @GameServiceHandle
 def register_101(key, dynamicId, argument):

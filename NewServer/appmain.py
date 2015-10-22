@@ -15,9 +15,11 @@ from firefly.server.server import FFServer
 
 # 支持websocket
 from twisted.internet import reactor
-from twisted.internet.protocol import Factory, Protocol
+from twisted.internet.protocol import Factory, Protocol, ServerFactory
+from firefly.netconnect.protoc import DefferedErrorHandle
 import hashlib, struct, base64
 from datetime import datetime
+from json import loads
 
 class Broadcaster(Protocol):
     def __init__(self, sockets):
@@ -34,16 +36,27 @@ class Broadcaster(Protocol):
             self.hand_shake(msg)
         else:
             raw_str = self.parse_recv_data(msg)
-            from json import dumps
-            from time import time
-            try:
-                data = {"time": time(), "data": str(raw_str)}
-                data = dumps(data)
-            except BaseException as err:
-                print "Err:", err, "Raw_str:", raw_str
-                data = "Error code:%s" % repr(raw_str)
-            self.send_data(data)
+            # from json import dumps
+            # from time import time
+            # try:
+            #     data = {"time": time(), "data": str(raw_str)}
+            #     data = dumps(data)
+            # except BaseException as err:
+            #     print "Err:", err, "Raw_str:", raw_str
+            #     data = "Error code:%s" % repr(raw_str)
+            # self.send_data(data)
+            if not raw_str:
+                return
 
+            key, dataStr = raw_str.split(" ", 1)
+            deferred = GlobalObject().remote['gate'].callRemote("forwarding", int(key), self.transport.sessionno, dataStr)
+
+            if deferred:
+                deferred.addCallback(self.send_data)
+                deferred.addErrback(DefferedErrorHandle)
+
+            # self.send_data(str(message))
+            # return message
 
     def connectionLost(self, reason):
         if self.sockets.has_key(self):
@@ -158,7 +171,7 @@ Sec-WebSocket-Accept: %s\r\n\r\n\
 
             self.sockets[self]['new_version'] = True
 
-class BroadcastFactory(Factory):
+class BroadcastFactory(ServerFactory):
     def __init__(self):
         self.sockets = {}
 
@@ -225,12 +238,12 @@ def config(self, config, servername=None, dbconfig=None,
         self.root.addServiceChannel(rootservice)
         reactor.listenTCP(rootport, BilateralFactory(self.root))
 
+    if webSocketPost:
+        reactor.listenTCP(webSocketPost, BroadcastFactory())
+
     for cnf in self.remoteportlist:
         rname = cnf.get('rootname')
         self.remote[rname] = RemoteObject(self.servername)
-
-    if webSocketPost:
-        reactor.listenTCP(webSocketPost, BroadcastFactory())
 
     if hasdb and dbconfig:
         log.msg(str(dbconfig))
