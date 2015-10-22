@@ -10,6 +10,12 @@ from app.game.core.userManager import UserManager
 
 
 @GameServiceHandle
+def httpTest_1(key, dynamicId, argument):
+    log.msg("httpTest_1")
+    return "hi http"
+
+
+@GameServiceHandle
 def register_101(key, dynamicId, argument):
     """ 注册协议.
     """

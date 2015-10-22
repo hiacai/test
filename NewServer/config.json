@@ -38,6 +38,18 @@
             "mem": true,
             "app": "app.GateServer",
             "log": "logs/gate.log"
+        },
+        "admin": {
+            "webport": 5000,
+            "name": "admin",
+            "remoteport": [
+                {
+                    "rootport": 10001,
+                    "rootname": "gate"
+                }
+            ],
+            "app": "app.adminServer",
+            "log": "logs/admin.log"
         }
     },
     "db": {
