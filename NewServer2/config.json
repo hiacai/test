@@ -6,6 +6,7 @@
     },
     "servers": {
         "net": {
+            "webSocketPort":10100,
             "netport": 10000,
             "name": "net",
             "remoteport": [
