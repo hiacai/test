@@ -226,11 +226,13 @@ def config(self, config, servername=None, dbconfig=None,
         netservice = services.CommandService("netservice")
         self.netfactory.addServiceChannel(netservice)
         reactor.listenTCP(netport,self.netfactory)
+        reactor.listenTCP(netport,self.netfactory,interface='::')  # ipv6
 
     if webport:
         self.webroot = vhost.NameVirtualHost()
         GlobalObject().webroot = self.webroot
         reactor.listenTCP(webport, DelaySite(self.webroot))
+        reactor.listenTCP(webport, DelaySite(self.webroot),interface='::')  # ipv6
 
     if rootport:
         self.root = PBRoot()
@@ -240,6 +242,7 @@ def config(self, config, servername=None, dbconfig=None,
 
     if webSocketPost:
         reactor.listenTCP(webSocketPost, BroadcastFactory())
+        reactor.listenTCP(webSocketPost, BroadcastFactory(),interface='::')  # ipv6
 
     for cnf in self.remoteportlist:
         rname = cnf.get('rootname')
