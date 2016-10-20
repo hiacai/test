@@ -76,7 +76,7 @@ def send():
         elif key == 102:
             msg = sendData('{"acc":"hiac","pwd":"123"}', key)
         else:
-            json = raw_input("json:")
+            msg = raw_input("json:")
             msg = sendData(msg, key)
         client.sendall(msg)
         return
